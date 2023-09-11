@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Widget Tabs</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="custom/fonts/Font-Awesome-5.13.0/font-awesome.css" />
+    <link type="text/css" rel="stylesheet" href="custom/fonts/Roboto-Font/Roboto-RCondensed.css" />
+    <link rel="stylesheet" type="text/css" href="custom/css/style.css">
+    <link rel="stylesheet" type="text/css" href="custom/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="custom/css/dataTable.css" />
+    <link rel="stylesheet" type="text/css" href="custom/css/bootstrap-custom-multiselect.css" />
+
+
+    <script type="text/javascript" src="custom/js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="custom/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="custom/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="custom/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="custom/js/bootstrap-multiselect.js"></script>
+    <script type="text/javascript" src="custom/js/inline-script.js"></script>
+
+    <script type="text/javascript" src="custom/js/widget-config.js"></script>
+    <script type="text/javascript" src="custom/js/category-custom.js"></script>
+
+   
+</head>
+<body>
+    <div class="container">
+       
+    <div class="body-container" id="WidgetEmail_container">
+        <header class="header-container">
+            <h2 class="h2-head">ENBD</h2>
+        </header>
+        <h3> ENBD Widget Tabs</h3>
+            <ul class="nav  nav nav-tabs" role="tablist">
+                <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Widget-Disposition<b class="caret"></b></a>
+                          
+                          <ul class="dropdown-menu">
+                              <li><a href="#categorytab" role="tab" data-toggle="tab">Category</a></li>
+              
+                              <li><a href="#subcategorytab" role="tab" data-toggle="tab">Sub-Category</a></li>
+                              <li><a href="#reasontab" role="tab" data-toggle="tab">Reason-code</a></li>
+                          </ul>
+                </li>
+				 <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Email-Channel<b class="caret"></b></a>
+                          <ul class="dropdown-menu">
+                              <li><a href="#keyconfigtab" role="tab" data-toggle="tab">EMAIL KEYWORD CONFIG</a></li>
+                              <li><a href="#prioritytab" role="tab" data-toggle="tab">EMAIL PRIORITY CONFIG</a></li>
+                              <li><a href="#blacklisttab" role="tab" data-toggle="tab">EMAIL BLACKLIST ADDRESS</a></li>
+                              <li><a href="#portaltab" role="tab" data-toggle="tab">EMAIL PORTAL ADDRESS</a></li>
+                              <li><a href="#templatemastertab" role="tab" data-toggle="tab">EMAIL TEMPLATE MASTER</a></li>
+                              <li><a href="#replymailboxtab" role="tab" data-toggle="tab">EMAIL REPLY MAILBOX MASTER</a></li>
+                              <li><a href="#ocmailboxtab" role="tab" data-toggle="tab">OC EMAIL MAILBOX CONFIG</a></li>
+                          </ul>
+                </li>    
+              
+            </ul>
+			
+	<div class="tab-content">
+           <div class="tab-pane" id="categorytab">
+                <div class="tab active"><label>Category</label>
+                       <table id="tblcannedmessage_grid" class="table-container" style="width: 100%; table-layout: auto;">
+                     <thead>
+                    <tr>
+                        <th class="hide">
+                            <h4>ID</h4>
+                        </th>
+                        <th>
+                            <h4>Category Name</h4>
+                        </th>
+                        <th>
+                            <h4>Category Description</h4>
+                        </th>
+                        <th>
+                            <h4>Channel</h4>
+                        </th>
+                        <th>
+                            <h4>Remarks</h4>
+                        </th>
+                        <th>
+                            <h4>Status</h4>
+                        </th>
+                        <th class="align-center">
+                            <h4>ADD</h4>
+                        </th>
+                        <th class="align-center">
+                            <h4>Delete</h4>
+                        </th>
+                    </tr>
+                       </thead>
+                      <tbody id="tbodyCannedMessageList">
+
+                    </tbody>
+                    </table>
+                      
+                </div>
+            </div>	
+		</div>	
+	</div>
+	
+	<script>
+        //Datatable Height
+        $(document).ready(
+            function () {
+                function setHeight() {
+                    windowHeight = $(window).innerHeight();
+                    $('.container').height(
+                        $(window).height() - 5 - $("header").height() - $(".form-body-container").height());
+                };
+                setHeight();
+
+                $(window).resize(function () {
+                    setHeight();
+                });
+
+                $(window).scroll(function () {
+                    setHeight();
+                });
+            });

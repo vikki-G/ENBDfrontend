@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Widget Tabs</title>
+    <link type="text/css" rel="stylesheet" href="custom/fonts/Font-Awesome-5.13.0/font-awesome.css" />
+    <link type="text/css" rel="stylesheet" href="custom/fonts/Roboto-Font/Roboto-RCondensed.css" />
+    <link rel="stylesheet" type="text/css" href="custom/css/style.css">
+    <link rel="stylesheet" type="text/css" href="custom/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="custom/css/dataTable.css" />
+    <link rel="stylesheet" type="text/css" href="custom/css/bootstrap-custom-multiselect.css" />
+    <script type="text/javascript" src="custom/js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="custom/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="custom/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="custom/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="custom/js/bootstrap-multiselect.js"></script>
+    <script type="text/javascript" src="custom/js/inline-script.js"></script>
+    <script type="text/javascript" src="custom/js/widget-config.js"></script>
+    <script type="text/javascript" src="custom/js/Widget-Common.js"></script>
+    <script type="text/javascript" src="custom/js/Widget-category.js"></script>
+   
+    
+    
+</head>
+<body>
+    <div class="body-container">
+        <div class="body-container" id="enbd_container">
+            <header class="header-container">
+                <h2 class="h2-head">ENBD</h2>
+            </header>
+                <ul class="nav  nav nav-tabs" role="tablist">
+                    <li class="dropdown">
+                              <a class="dropdown-toggle" data-toggle="dropdown" href="#">Widget Disposition<b class="caret"></b></a>
+                              <ul class="dropdown-menu">
+                                  <li><a href="#categorytab" role="tab" data-toggle="tab">Category</a></li>
+                                  
+                              </ul>
+                    </li>
+                       
+                </ul>
+             <div class="tab-content">
+               <div class="tab-pane" id="categorytab">
+                    <div class="tab active"><label>Category</label>
+                        <div class="header-right ">
+                            <button class="add-btn add-page-btn green-btn pull-right"><i class="fa fa-plus"></i> ADD</button>
+                        </div>
+                           <table id="tblcategory_grid" class="table-container" style="width: 100%; table-layout: auto;">
+                                <thead>
+                                        <tr> 
+                                            <th>
+                                                <h4>Category Name</h4>
+                                            </th>
+                                            <th>
+                                                <h4>Category Description</h4>
+                                            </th>
+                                            <th>
+                                                <h4>Channel</h4>
+                                            </th>
+                                            <th>
+                                                <h4>Remarks</h4>
+                                            </th>
+                                            <th>
+                                                <h4>Status</h4>
+                                            </th>
+                                            <th class="align-center">
+                                                <h4>Update</h4>
+                                            </th>
+                                            <th class="align-center">
+                                                <h4>Delete</h4>
+                                            </th>
+                                        </tr>
+                                </thead>
+                                <tbody id="tblCategoryList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+              <!--Adding Part of Remaining Table-->  
+            
+        </div>	
+        </div>
+
+        <script>
+            //Datatable Height
+            $(document).ready(
+                function () {
+                    function setHeight() {
+                        windowHeight = $(window).innerHeight();
+                        $('.report-table-container').height(
+                            $(window).height() - 5 - $("header").height() - $(".form-body-container").height());
+                    };
+                    setHeight();
+    
+                    $(window).resize(function () {
+                        setHeight();
+                    });
+    
+                    $(window).scroll(function () {
+                        setHeight();
+                    });
+                });
+            //Datatable Height
+            
+            //Popup for <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<catergory >>>>>>>>>>>>>>>>>>>>>>.
+            $(document).ready(function () {
+                $(document).on("click", '#categorytab .add-page-btn', function () {
+                    $("#Category_Name").val("");
+                    $("#Category_Description").val("");
+                    $("#Channel_Group").val("");
+                    $("#Remarks_Type").val("");
+                    $("#Status_Type").val("");
+                    $("#hdnCategoryID").val("");
+                    CategoryRemoveRequired();
+                    $('.popup-body-container#addeditCategoryData_Pop').removeClass("hide");
+                    $('.popup-body-container#addeditCategoryData_Pop #submitAnswerbtn1').removeClass("hide");
+                    $('.popup-body-container#addeditCategoryData_Pop #updateAnswerbtn1').addClass("hide");
+                    $('.popup-body-container#addeditCategoryData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+                    $('.popup-body-container#addeditCategoryData_Pop #addeditCategoryData_Pop_head').text('Add New Category');
+                });
+                    //Edit
+                $(document).on("click", '#categorytab .edit-btn', function (r) {
+                            var editDataid = $(this).data("id");
+                            categoryNameVal = $("#" + editDataid + " #CategoryName").text();
+                            categoryDescVal = $("#" + editDataid + " #CategoryDescription").text();
+                            channelTypeVal = $("#" + editDataid + " #ChannelType").text();
+                            remarksTypeVal = $("#" + editDataid + " #RemarksType").text();
+                            statusTypeVal = $("#" + editDataid + " #StatusType").text();
+                            hdnCategoryID = $("#" + editDataid + " #cannedId").text();
+                            $("#Category_Name").val(categoryNameVal);
+                            $("#Category_Description").val(categoryDescVal);
+                            $("#Channel_Group").val(channelTypeVal);
+                            $("#Remarks_Type").val(remarksTypeVal);
+                            $("#Status_Type").val(statusTypeVal);
+                            $("#hdnCategoryID").val(editDataid); 
+                            $('.popup-body-container#addeditCategoryData_Pop').removeClass("hide");
+                            $('.popup-body-container#addeditCategoryData_Pop #submitAnswerbtn1').addClass("hide");
+                            $('.popup-body-container#addeditCategoryData_Pop #updateAnswerbtn1').removeClass("hide");
+                            $('.popup-body-container#addeditCategoryData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+                            $('.popup-body-container#addeditCategoryData_Pop #addeditCategoryData_Pop_head').text('Edit Category');
+                });
+                //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<category DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                $(document).on("click", '#categorytab .delete-btn', function () {
+                    var categoryDeleteId = $(this).data("id");
+                    var categoryName=$("#Category_Name").val();
+                    var categoryDeleteText = $(this).closest("td").siblings(".message-text").html();
+                    $('.popup-body-container#deleteCategoryRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+                    deleterowCategoryTable(categoryDeleteId, categoryDeleteText); 
+                });
+                $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+                    $('.popup-body-container#message_Pop').removeClass("hide");
+                    $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+                });
+            });
+        </script>
+
+        <!--///////////////////////////////////category Create  PopUp///////////////////////////-->
+        <div class="popup-body-container hide " id="addeditCategoryData_Pop" style="z-index: 99999999">
+            <div class="popup-container">
+                <div class="popup-header">
+                    <h4 class="message-popup-head" id="addeditCategoryData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+                </div>
+                <div class="popup-body" style="min-height: 80px;">
+                    <ul class="form-container">
+                        <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <input type="hidden" name="hdnCategoryID" id="hdnCategoryID" value="" />
+                                <div class="label-field">
+                                    <label>category Name :</label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="Category_Name" name="Category_Name" class="text input-select"></input>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <div class="label-field">
+                                    <label>Category Description :</label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="Category_Description" name="Category_Description" class="text input-select"></input>
+                                </div>
+                            </div>
+                        </li>
+    
+                        <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <div class="label-field">
+                                    <label>Channel Type :</label>
+                                </div>
+                                <div class="input-field">
+                                    <select id="Channel_Group" name="Channel_Group" class="input-select">
+                                        <option value="" selected="selected">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                
+                        <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <div class="label-field">
+                                    <label>Remarks :</label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="Remarks_Type" name="Remarks_Type" class="text input-select"></input>
+                                </div>
+                            </div>
+                        </li>
+    
+                        <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-group">
+                                <div class="label-field">
+                                    <label>Status :</label>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="Status_Type" name="Status_Type" class="text input-select"></input>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="popup-footer">
+                    <ul class="popup-btn-container">
+                        <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveCategoryRow()" id="submitAnswerbtn1">Save</button></li>
+                        <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateCategoryData()" id="updateAnswerbtn1">Update</button></li>
+                         <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+         <!--///////////////////////////////////category Delete PopUp///////////////////////////-->
+        <div class="popup-body-container popup-body-msg  hide" id="deleteCategoryRowConfirmation_Pop" style="z-index: 99999999">
+            <div class="popup-container">
+                <input type="hidden" name="hdnDeleteCategorytableID" id="hdnDeleteCategorytableID" value="" />
+                <input type="hidden" name="hdnDeleteValidateCategoryNameID" id="hdnDeleteValidateCategoryNameID" value="" />
+
+                <div class="popup-header delete-popheader">
+                    <h4 class="message-category-popup-head"></h4><i class="close-pop-btn hide">X</i>
+                </div>
+                <div class="popup-body" style="min-height: 80px;">
+    
+                    <p class="message-category-popup-text msgpopuptxt"></p>
+                </div>
+                <div class="popup-footer">
+                    <ul class="popup-btn-container">
+                        <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="deleteConfirmCategoryTable()" id="msgConfirmCategory-btn">Yes</button></li>
+                         <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+<!-------------------------------SUB CATEGORY SCRIPT SECTION--------------------------------------->
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", '#subcategorytab .add-page-btn1', function () {
+                $("#subcategoryNameType").val("");
+                $("#cboSubNameType").val("");
+                $("#cboDescriptionType").val("");
+                $("#cboRemarksType").val("");
+                $("#cboStatusType").val("");
+                $("#hdnSubCategoryID").val("");
+                SubCategoryRemoveRequired();
+                $('.popup-body-container#addeditSubCategoryData_Pop').removeClass("hide");
+                $('.popup-body-container#addeditSubCategoryData_Pop #submitAnswerbtn2').removeClass("hide");
+                $('.popup-body-container#addeditSubCategoryData_Pop #updateAnswerbtn2').addClass("hide");
+                $('.popup-body-container#addeditSubCategoryData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+                $('.popup-body-container#addeditSubCategoryData_Pop #addeditSubCategoryData_Pop_head').text('Add New SubCategory');
+            });
+            //Edit
+            $(document).on("click", '#subcategorytab .edit-btn', function (r) {
+                var editDataid = $(this).data("id");
+                categoryNameVal = $("#" + editDataid + " #CategoryName").text();
+                categoryDescVal = $("#" + editDataid + " #SubCategoryName").text();
+                channelTypeVal = $("#" + editDataid + " #SubCategoryDescription").text();
+                remarksTypeVal = $("#" + editDataid + " #SubRemarksType").text();
+                statusTypeVal = $("#" + editDataid + " #SubStatusType").text();
+                hdnsubcategoryID = $("#" + editDataid + " #cannedId").text();
+                $("#subcategoryNameType").val(categoryNameVal);
+                $("#cboSubNameType").val(categoryDescVal);
+                $("#subcategoryDescriptionType").val(channelTypeVal);
+                $("#subcategoryRemarksType").val(remarksTypeVal);
+                $("#subcategoryStatusType").val(statusTypeVal);
+                $("#hdnSubCategoryID").val(editDataid);
+                $('.popup-body-container#addeditSubCategoryData_Pop').removeClass("hide");
+                $('.popup-body-container#addeditSubCategoryData_Pop #submitAnswerbtn2').addClass("hide");
+                $('.popup-body-container#addeditSubCategoryData_Pop #updateAnswerbtn2').removeClass("hide");
+                $('.popup-body-container#addeditSubCategoryData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+                $('.popup-body-container#addeditSubCategoryData_Pop #addeditSubCategoryData_Pop_head').text('Edit SubCategory');
+            });
+
+            //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SUB--category DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                $(document).on("click", '#subcategorytab .delete-btn', function () {
+                var subcategoryDeleteId = $(this).data("id");
+                var subcategoryDeleteText = $(this).closest("td").siblings(".message-text").html();
+                $('.popup-body-container#deleteSubCategoryRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+                deleteSubCategoryTable(subcategoryDeleteId, subcategoryDeleteText); 
+            
+            });
+            //confirm button area Delete Successfully Popup
+            $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+                $('.popup-body-container#message_Pop').removeClass("hide");
+                $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+            });
+
+        });
+    </script>
+
+<!--////////////////////////// SUB-category Create  PopUp///////////////////////////-->
+<div class="popup-body-container hide " id="addeditSubCategoryData_Pop" style="z-index: 99999999">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h4 class="message-popup-head" id="addeditSubCategoryData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+            <div class="popup-body" style="min-height: 80px;">
+                <ul class="form-container">
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <input type="hidden" name="hdnSubCategoryID" id="hdnSubCategoryID" value="" />
+                            <div class="label-field">
+                                <label>category Name :</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="subcategoryNameType" name="subcategoryNameType" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>SubCategory Name :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="cboSubNameType" name="cboSubNameType" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>SubCategory Description :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="subcategoryDescriptionType" name="subcategoryDescriptionType" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>Remarks :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="subcategoryRemarksType" name="subcategoryRemarksType" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>Status :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="subcategoryStatusType" name="subcategoryStatusType" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="popup-footer">
+                <ul class="popup-btn-container">
+                    <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveSubCategoryRow()" id="submitAnswerbtn2">Save</button></li>
+                    <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateSubCategoryData()" id="updateAnswerbtn2">Update</button></li>
+                    <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+                </ul>
+            </div>
+    </div>
+</div>
+
+<!--///////////////////////////////////subcategory Delete PopUp///////////////////////////-->
+
+<div class="popup-body-container popup-body-msg  hide" id="deleteSubCategoryRowConfirmation_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+         <input type="hidden" name="hdnDeleteSubCategorytableID" id="hdnDeleteSubCategorytableID" value="" />
+         <input type="hidden" name="SubcategorynametableID" id="SubcategorynametableID" value="" />
+
+            <div class="popup-header delete-popheader">
+                <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+            <div class="popup-body" style="min-height: 80px;">
+                <p class="message-popup-text msgpopuptxt"></p>
+             </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return  deleteConfirmSubCategoryTable();" id="msgConfirm-btn">Yes</button></li>
+                <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--------------------------------------------------END SUBCATEGORY------------------------------------------------->
+
+<!-------------------------------Reasoncode SCRIPT SECTION--------------------------------------->
+<script>
+    $(document).ready(function () {
+              $(document).on("click", '#reasontab .add-page-btn2', function () {
+                  $("#Reasoncodecategory").val("");
+                  $("#Reasoncodesubcategory").val("");
+                  $("#cboReasonNameType").val("");
+                  $("#cboReasonDescriptionType").val("");
+                  $("#cboSmsFlagType").val("");
+                  $("#cboSmsTemplateCodeType").val("");
+                  $("#cboSmsTemplateType").val("");
+                  $("#ReasoncodeRemarksType").val("");
+                  $("#ReasoncodeStatusType").val("");
+                  $("#hdnReasonCodeID").val("");
+                  ReasonCodeRemoveRequired();
+                  $('.popup-body-container#addeditReasonCodeData_Pop').removeClass("hide");
+                  $('.popup-body-container#addeditReasonCodeData_Pop #submitAnswerbtn3').removeClass("hide");
+                  $('.popup-body-container#addeditReasonCodeData_Pop #updateAnswerbtn3').addClass("hide");
+                  $('.popup-body-container#addeditReasonCodeData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+                  $('.popup-body-container#addeditReasonCodeData_Pop #addeditReasonCodeData_Pop_head').text('Add New ReasonCode');
+              });
+            //Edit
+            $(document).on("click", '#reasontab .edit-btn', function (r) {
+                var editDataid = $(this).data("id");
+                categoryNameVal = $("#" + editDataid + " #widgetCategoryName").text();
+                subCategoryNameVal = $("#" + editDataid + " #widgetSubCategoryName").text();
+                reasoncodeVal = $("#" + editDataid + " #widgetreasoncode").text();
+                reasonDescVal = $("#" + editDataid + " #widgetreasondesc").text();
+                smsflagVal = $("#" + editDataid + " #widgetsmsflag").text();
+                smsTemplateCodeVal = $("#" + editDataid + " #widgetsmstemplatecode").text();
+                smsTemplateVal = $("#" + editDataid + " #widgetsmstemplate").text();
+                remarksVal = $("#" + editDataid + " #widgetremarks").text();
+                statuseVal = $("#" + editDataid + " #widgetstatus").text();
+                hdnReasonCodeID = $("#" + editDataid + " #cannedId").text();
+                $("#Reasoncodecategory").val(categoryNameVal);
+                $("#Reasoncodesubcategory").val(subCategoryNameVal);
+                $("#cboReasonNameType").val(reasoncodeVal);
+                $("#cboReasonDescriptionType").val(reasonDescVal);
+                $("#cboSmsFlagType").val(smsflagVal);
+                $("#cboSmsTemplateCodeType").val(smsTemplateCodeVal);
+                $("#cboSmsTemplateType").val(smsTemplateVal);
+                $("#ReasoncodeRemarksType").val(remarksVal);
+                $("#ReasoncodeStatusType").val(statuseVal);
+                $("#hdnReasonCodeID").val(editDataid); 
+                $('.popup-body-container#addeditReasonCodeData_Pop').removeClass("hide");
+                $('.popup-body-container#addeditReasonCodeData_Pop #submitAnswerbtn3').addClass("hide");
+                $('.popup-body-container#addeditReasonCodeData_Pop #updateAnswerbtn3').removeClass("hide");
+                $('.popup-body-container#addeditReasonCodeData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+                $('.popup-body-container#addeditReasonCodeData_Pop #addeditReasonCodeData_Pop_head').text('Edit ReasonCode');
+            });
+               //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< REASONCODE DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                  $(document).on("click", '#reasontab .delete-btn', function () {
+                  var reasonCodeDeleteId = $(this).data("id");
+                  var reasonCodeDeleteText = $(this).closest("td").siblings(".message-text").html();
+                  $('.popup-body-container#deleteReasonCodeRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+                  deleteOpenPopUpReasonCodeTable(reasonCodeDeleteId, reasonCodeDeleteText); 
+              });
+             //confirm button area Delete Successfully Popup
+              $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+                  $('.popup-body-container#message_Pop').removeClass("hide");
+                  $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+              });
+          });
+  </script>
+  
+  
+  
+  <!---------------------------------------REASONCODE CREATE POPUP SECTION------------------------------------->
+  <div class="popup-body-container hide " id="addeditReasonCodeData_Pop" style="z-index: 99999999">
+      <div class="popup-container">
+          <div class="popup-header">
+              <h4 class="message-popup-head" id="addeditReasonCodeData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+          </div>
+          <div class="popup-body" style="min-height: 80px;">
+              <ul class="form-container">
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <input type="hidden" name="hdnReasonCodeID" id="hdnReasonCodeID" value="" />
+                          <div class="label-field">
+                              <label>Category Name :</label>
+                          </div>
+                          <div class="input-field">
+                              <select id="Reasoncodecategory" name="Reasoncodecategory" class="input-select">
+                                  <option value="" selected="selected">Select</option>
+  
+                              </select>
+                          </div>
+                      </div>
+                  </li>
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>SubCategory Name :</label>
+                          </div>
+                          <div class="input-field">
+                              <select id="Reasoncodesubcategory" name="Reasoncodesubcategory" class="input-select">
+                                  <option value="" selected="selected">Select</option>
+                              </select>
+                          </div>
+                      </div>
+                  </li>
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>ReasonCode Name:</label>
+                          </div>
+                          <div class="input-field">
+                              <input type="text" id="cboReasonNameType" name="cboReasonNameType" class="text input-select"></input>
+                          </div>
+                      </div>
+                  </li>
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>ReasonCode Description :</label>
+                          </div>
+                          <div class="input-field">
+                              <input type="text" id="cboReasonDescriptionType" name="cboReasonDescriptionType" class="text input-select"></input>
+                             
+                          </div>
+                      </div>
+                  </li>
+  
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                         <div class="label-field">
+                             <label>SMS Flag :</label>
+                        </div>
+                        <div class="input-field">
+                             <select id="cboSmsFlagType" name="cboSmsFlagType" class="input-select">
+                                <option value="" selected="selected">Select</option>
+                                 <option value="True" selected="selected">True</option>
+                                <option value="False" selected="selected">False</option>
+                            </select>
+                         </div>
+                        </div>
+                    </li>
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>SMS TemplateCode :</label>
+                          </div>
+                          <div class="input-field">
+                              <input type="text" id="cboSmsTemplateCodeType" name="cboSmsTemplateCodeType" class="text input-select"></input>
+                             
+                          </div>
+                      </div>
+                  </li>
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>SMS Template:</label>
+                          </div>
+                          <div class="input-field">
+                              <input type="text" id="cboSmsTemplateType" name="cboSmsTemplateType" class="text input-select"></input>
+                             
+                          </div>
+                      </div>
+                  </li>  
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>Remarks :</label>
+                          </div>
+                          <div class="input-field">
+                              <input type="text" id="ReasoncodeRemarksType" name="ReasoncodeRemarksType" class="text input-select"></input>
+                          </div>
+                      </div>
+                  </li>
+                  <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="input-group">
+                          <div class="label-field">
+                              <label>Status :</label>
+                          </div>
+                          <div class="input-field">
+                              <input type="text" id="ReasoncodeStatusType" name="ReasoncodeStatusType" class="text input-select"></input>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+          <div class="popup-footer">
+              <ul class="popup-btn-container">
+                  <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveReasonCodeRow()" id="submitAnswerbtn3">Save</button></li>
+                  <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateReasoncodeData()" id="updateAnswerbtn3">Update</button></li>
+                   <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  
+  <!--///////////////////////////////////Reasoncode Delete PopUp///////////////////////////-->
+
+  <div class="popup-body-container popup-body-msg  hide" id="deleteReasonCodeRowConfirmation_Pop" style="z-index: 99999999">
+      <div class="popup-container">
+          <input type="hidden" name="hdnDeleteReasonCodetableID" id="hdnDeleteReasonCodetableID" value="" />
+          <div class="popup-header delete-popheader">
+              <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+          </div>
+          <div class="popup-body" style="min-height: 80px;">
+              <p class="message-popup-text msgpopuptxt"></p>
+          </div>
+          <div class="popup-footer">
+              <ul class="popup-btn-container">
+                  <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return  deleteConfirmReasonCodeTable();" id="msgConfirm-btn">Yes</button></li>
+                   <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  
+<script>
+ $(document).ready(function () {
+     $(document).on("click", '#keywordConfigtab .add-page-btn3', function () {
+         $("#email-keyword-config-group").val("");
+         $("#email-keyword-config-keyword").val("");
+         $("#email-keyword-config-typePriority").val("");
+         $("#hdnEmailKeywordConfigID").val("");
+         EmailKeyConfigRemoverequired();
+         $('.popup-body-container#addeditEmailKeywordConfigData_Pop').removeClass("hide");
+         $('.popup-body-container#addeditEmailKeywordConfigData_Pop #submitAnswerbtn4').removeClass("hide");
+         $('.popup-body-container#addeditEmailKeywordConfigData_Pop #updateAnswerbtn4').addClass("hide");
+         $('.popup-body-container#addeditEmailKeywordConfigData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+         $('.popup-body-container#addeditEmailKeywordConfigData_Pop #addeditEmailKeywordConfigData_Pop_head').text('Add New Email keyword Config');
+     });
+      //Edit
+      $(document).on("click", '#keywordConfigtab .edit-btn', function (r) {
+        var editDataid = $(this).data("id");
+        groupNameVal = $("#" + editDataid + " #EmailChannelGroup").text();
+        keywordVal = $("#" + editDataid + " #EmailChannelKeyword").text();
+        typepriorityVal = $("#" + editDataid + " #EmailChannelTypePriority").text();
+        hdnEmailKeywordConfigID = $("#" + editDataid + " #cannedId").text();
+        EmailKeyConfigRemoverequired();
+        $("#email-keyword-config-group").val( groupNameVal);
+        $("#email-keyword-config-keyword").val( keywordVal);
+        $("#email-keyword-config-typePriority").val(typepriorityVal);
+        $("#hdnEmailKeywordConfigID").val(editDataid); 
+        $('.popup-body-container#addeditEmailKeywordConfigData_Pop').removeClass("hide");
+        $('.popup-body-container#addeditEmailKeywordConfigData_Pop #submitAnswerbtn4').addClass("hide");
+        $('.popup-body-container#addeditEmailKeywordConfigData_Pop #updateAnswerbtn4').removeClass("hide");
+        $('.popup-body-container#addeditEmailKeywordConfigData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+        $('.popup-body-container#addeditEmailKeywordConfigData_Pop #addeditEmailKeyConfigData_Pop_head').text('Edit Email keyword Config');
+    });
+    //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EMAIL KEYWORD  DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    $(document).on("click", '#keywordConfigtab .delete-btn', function () {
+        var reasonCodeDeleteId = $(this).data("id");
+        var reasonCodeDeleteText = $(this).closest("td").siblings(".message-text").html();
+        $('.popup-body-container#deleteKeywordConfigRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+        deleteKeywordConfigTable(reasonCodeDeleteId, reasonCodeDeleteText); 
+    });
+    //confirm button area Delete Successfully Popup
+    $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+        $('.popup-body-container#message_Pop').removeClass("hide");
+        $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+    });
+
+
+ });
+</script>
+
+
+<div class="popup-body-container hide " id="addeditEmailKeywordConfigData_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <div class="popup-header">
+            <h4 class="message-popup-head" id="addeditEmailKeywordConfigData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+            <ul class="form-container">
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <input type="hidden" name="hdnEmailKeywordConfigID" id="hdnEmailKeywordConfigID" value="" />
+                        <div class="label-field">
+                            <label>group Name :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="email-keyword-config-group" name="email-keyword-config-group" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Keyword :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="email-keyword-config-keyword" name="email-keyword-config-keyword" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Type Priority :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="email-keyword-config-typePriority" name="email-keyword-config-typePriority" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveEmailKeywordConfigRow()" id="submitAnswerbtn4">Save</button></li>
+                <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateEmailKeyConfig()" id="updateAnswerbtn4">Update</button></li>
+                 <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!------------------------------------------------------------ADD SECTION END--------------------------------------------------------->
+  <!--///////////////////////////////////Keywordconfig Delete PopUp///////////////////////////-->
+
+  <div class="popup-body-container popup-body-msg  hide" id="deleteKeywordConfigRowConfirmation_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <input type="hidden" name="hdnDeletekeywordtableID" id="hdnDeletekeywordtableID" value="" />
+        <input type="hidden" name="hdnDeletegrouptableID" id="hdnDeletegrouptableID" value="" />
+
+        <div class="popup-header delete-popheader">
+            <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+            <p class="message-popup-text msgpopuptxt"></p>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return  deleteConfirmKeywordconfigTable();" id="msgConfirm-btn">Yes</button></li>
+                 <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!---------------------------------------------------------Keywordconfig Delete PopUp END----------------------------------------->
+
+
+<!------------------------------------------------------------Priority config start--------------------------------------------------------->
+<script>
+    $(document).ready(function () {
+        $(document).on("click", '#PriorityConfigtab .add-page-btn4', function () {
+            $("#emailmailbox").val("");
+            $("#emailcustomersegment").val("");
+            $("#emailkeywordgroupname").val("");
+            $("#emailpriorityvalue").val("");
+            $("#hdnPrioID").val("");
+            priorityconfigRemoveRequired();
+            $('.popup-body-container#addeditpriority_Pop').removeClass("hide");
+            $('.popup-body-container#addeditpriority_Pop #submitAnswerbtn5').removeClass("hide");
+            $('.popup-body-container#addeditpriority_Pop #updateAnswerbtn5').addClass("hide");
+            $('.popup-body-container#addeditpriority_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+            $('.popup-body-container#addeditpriority_Pop #addeditpriority_Pop_head').text('Add Email Priority Config');
+        });
+        ////edit
+        $(document).on("click", '#PriorityConfigtab .edit-btn02', function (r) {
+                var editDataid = $(this).data("id");
+                priomailVal = $("#" + editDataid + " #priombox").text();
+                priocusVal = $("#" + editDataid + " #priosegment").text();
+                priokeygrpVal = $("#" + editDataid + " #priokname").text();
+                prioprioVal = $("#" + editDataid + " #priorityvalue").text();
+                hdnPrioID = $("#" + editDataid + " #Id").text();
+                priorityconfigRemoveRequired();
+                $("#emailmailbox").val(priomailVal);
+                $("#emailcustomersegment").val(priocusVal);
+                $("#emailkeywordgroupname").val(priokeygrpVal);
+                $("#emailpriorityvalue").val(prioprioVal);
+                $("#hdnPrioID").val(editDataid); 
+                $('.popup-body-container#addeditpriority_Pop').removeClass("hide");
+                $('.popup-body-container#addeditpriority_Pop #submitAnswerbtn5').addClass("hide");
+                $('.popup-body-container#addeditpriority_Pop #updateAnswerbtn5').removeClass("hide");
+                $('.popup-body-container#addeditpriority_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+                $('.popup-body-container#addeditpriority_Pop #addeditpriority_Pop_head').text('Edit Email Priority Config');
+        });
+        //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EMAIL KEYWORD  DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        $(document).on("click", '#PriorityConfigtab .delete-btn', function () {
+            var reasonCodeDeleteId = $(this).data("id");
+            var reasonCodeDeleteText = $(this).closest("td").siblings(".message-text").html();
+            $('.popup-body-container#deletepriorityConfigRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+            deletePriorityConfigTable(reasonCodeDeleteId, reasonCodeDeleteText); 
+        });
+        //confirm button area Delete Successfully Popup
+        $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+            $('.popup-body-container#message_Pop').removeClass("hide");
+            $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+        });
+      
+    });
+
+        
+</script>
+
+<!--///////////////////////////////////prio Create  PopUp///////////////////////////-->
+<div class="popup-body-container hide" id="addeditpriority_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <div class="popup-header">
+            <h4 class="message-popup-head" id="addeditpriority_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+            <ul class="form-container">
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <input type="hidden" name="hdnPrioID" id="hdnPrioID" value="" />
+                        <div class="label-field">
+                            <label>MailBox :</label>
+                        </div>
+                        <div class="input-field">
+                            <select id="emailmailbox" name="emailmailbox" class="input-select">
+                                <option value="" selected="selected">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Customer Segment :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="emailcustomersegment" name="emailcustomersegment" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Group Name :</label>
+                        </div>
+                        <div class="input-field">
+                            <select id="emailkeywordgroupname" name="emailkeywordgroupname" class="input-select">
+                                <option value="" selected="selected">Select</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </li>
+        
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Priority Value :</label>
+                        </div>
+                        <div class="input-field">
+                            <select id="emailpriorityvalue" name="emailpriorityvalue" class="input-select">
+                                <option value="" selected="selected">Select</option>
+                                <option value="1" selected="selected">1</option>
+                                <option value="2" selected="selected">2</option>
+                                <option value="3" selected="selected">3</option>
+                                <option value="4" selected="selected">4</option>
+                                <option value="5" selected="selected">5</option>
+                                <option value="6" selected="selected">6</option>
+                                <option value="7" selected="selected">7</option>
+                                <option value="8" selected="selected">8</option>
+                                <option value="9" selected="selected">9</option>
+                                <option value="10" selected="selected">10</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn hide" onclick="savePriorityconfigRow()" id="submitAnswerbtn5">Save</button></li>
+                <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updatePriorityconfigData()" id="updateAnswerbtn5">Update</button></li>
+                 <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------------------------------ADD SECTION END--------------------------------------------------------->
+  <!--///////////////////////////////////Keywordconfig Delete PopUp///////////////////////////-->
+
+  <div class="popup-body-container popup-body-msg  hide" id="deletepriorityConfigRowConfirmation_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <input type="hidden" name="hdnDeleteprioritytableID" id="hdnDeleteprioritytableID" value="" />
+        <div class="popup-header delete-popheader">
+            <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+            <p class="message-popup-text msgpopuptxt"></p>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return  deleteConfirmPriorityconfigTable();" id="msgConfirm-btn">Yes</button></li>
+                 <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!---------------------------------------------------------Keywordconfig Delete PopUp END----------------------------------------->
+
+
+
+<!------------------------------------------------------------Priority config End--------------------------------------------------------->
+
+<!-------------------------------EMAIL BLACKLIST ADDRESS SCRIPT SECTION--------------------------------------->
+<script>
+    $(document).ready(function () {
+        $(document).on("click", '#blacklistAddresstab .add-page-btn5', function () {
+            $("#emailBlackListAddressType").val("");
+            $("#emailBlacklistMailBoxType").val("");
+            $("#emailBlacklistType").val("");
+            $("#hdnEmailBlackListID").val("");
+            EmailBlackListAddressRemoveRequired();
+            $('.popup-body-container#addeditEmailBlackListAddress_Pop').removeClass("hide");
+            $('.popup-body-container#addeditEmailBlackListAddress_Pop #submitAnswerbtn8').removeClass("hide");
+            $('.popup-body-container#addeditEmailBlackListAddress_Pop #updateAnswerbtn8').addClass("hide");
+            $('.popup-body-container#addeditEmailBlackListAddress_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+            $('.popup-body-container#addeditEmailBlackListAddress_Pop #addeditEmailBlackListAddress_Pop_head').text('Add Email Blacklist Address');
+        });
+         //Edit
+         $(document).on("click", '#blacklistAddresstab .edit-btn03', function (r) {
+                var editDataid = $(this).data("id");
+                blacklistAddresNameVal = $("#" + editDataid + " #EmailChannelBlackListPortalAddress").text();
+                mailboxNameVal = $("#" + editDataid + " #EmailChannelBlacklIstMailboxAddress").text();
+                typeBlacklistVal = $("#" + editDataid + " #EmailChannelBlacklistTypeAddress").text();
+                hdnEmailBlackListID = $("#" + editDataid + " #cannedId").text();
+                $("#emailBlackListAddressType").val(blacklistAddresNameVal);
+                $("#emailBlacklistMailBoxType").val(mailboxNameVal);
+                $("#hdnEmailBlackListID").val(editDataid); 
+                $('.popup-body-container#addeditEmailBlackListAddress_Pop').removeClass("hide");
+                $('.popup-body-container#addeditEmailBlackListAddress_Pop #submitAnswerbtn8').addClass("hide");
+                $('.popup-body-container#addeditEmailBlackListAddress_Pop #updateAnswerbtn8').removeClass("hide");
+                $('.popup-body-container#addeditEmailBlackListAddress_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+                $('.popup-body-container#addeditEmailBlackListAddress_Pop #addeditEmailBlackListAddress_Pop_head').text('Edit Email Blacklist Address');
+            });
+         //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EMAIL BLACKLIST ADDRESS DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        $(document).on("click", '#blacklistAddresstab .delete-btn', function () {
+            var emailBlackAddressDeleteId = $(this).data("id");
+            var emailBlackAddressDeleteText = $(this).closest("td").siblings(".message-text").html();
+            $('.popup-body-container#deleteEmailBLACKAddresRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+            deleteBlackListAddressTable(emailBlackAddressDeleteId, emailBlackAddressDeleteText); 
+        });
+       //confirm button area Delete Successfully Popup
+        $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+            $('.popup-body-container#message_Pop').removeClass("hide");
+            $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+        });
+      
+    });
+   
+   </script>
+   
+   <!--////////////////////////// EMAIL BLACKLIST ADDRESS Create  PopUp///////////////////////////-->
+   <div class="popup-body-container hide " id="addeditEmailBlackListAddress_Pop" style="z-index: 99999999">
+       <div class="popup-container">
+           <div class="popup-header">
+               <h4 class="message-popup-head" id="addeditEmailBlackListAddress_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+           </div>
+           <div class="popup-body" style="min-height: 80px;">
+               <ul class="form-container">
+                   <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                       <div class="input-group">
+                           <input type="hidden" name="hdnEmailBlackListID" id="hdnEmailBlackListID" value="" />
+                           <div class="label-field">
+                               <label>BlackList Address :</label>
+                           </div>
+                           <div class="input-field">
+                               <input type="text" id="emailBlackListAddressType" name="emailBlackListAddressType" class="text input-select"></input>
+                           </div>
+                       </div>
+                   </li>
+                   <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                       <div class="input-group">
+                           <div class="label-field">
+                               <label>Mail-Box :</label>
+                           </div>
+                           <div class="input-field">
+                               <select id="emailBlacklistMailBoxType" name="emailBlacklistMailBoxType" class="input-select">
+                                   <option value="" selected="selected">Select</option>
+                               </select>
+                           </div>
+                       </div>
+                   </li>
+
+                 
+
+                 <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Type Blacklist :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="emailBlacklistType" name="emailBlacklistType" class="text input-select"></input>
+                        </div>
+                    </div>
+                 </li>
+
+
+               </ul>
+           </div>
+           <div class="popup-footer">
+               <ul class="popup-btn-container">
+                   <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveEmailBLackListAddressAddRow()" id="submitAnswerbtn8">Save</button></li>
+                   <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateBlacklistAddressConfig()" id="updateAnswerbtn8">Update</button></li>
+                   <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+               </ul>
+           </div>
+       </div>
+   </div>
+   <!--///////////////////////////////////Blocklist Create PopUp End///////////////////////////-->
+
+   <!--///////////////////////////////////Deelete Blocklist PopUp start///////////////////////////-->
+   <div class="popup-body-container popup-body-msg  hide" id="deleteEmailBLACKAddresRowConfirmation_Pop" style="z-index: 99999999">
+        <div class="popup-container">
+            <input type="hidden" name="hdnDeleteEmailBlackListAddresstableID" id="hdnDeleteEmailBlackListAddresstableID" value="" />
+            <input type="hidden" name="hdnDeleteEmailBlackListAddresstableID" id="hdnDeleteEmailBlackListAddresstableID" value="" />
+            <div class="popup-header delete-popheader">
+                <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+             <div class="popup-body" style="min-height: 80px;">
+                <p class="message-popup-text msgpopuptxt"></p>
+            </div>
+            <div class="popup-footer">
+                <ul class="popup-btn-container">
+                    <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return deleteConfirmEmailBlackListAddressTable();" id="blocklistConfirm-btn">Yes</button></li>
+                    <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+                </ul>
+            </div>
+         </div>
+   </div>
+     <!--///////////////////////////////////Deelete Blocklist PopUp End///////////////////////////-->
+
+<!-------------------------------EMAIL PORTAL ADDRESS SCRIPT SECTION--------------------------------------->
+<script>
+ $(document).ready(function () {
+     $(document).on("click", '#portalAddresstab .add-page-btn6', function () {
+         $("#emailPortalAddressType").val("");
+         $("#hdnEmPortelID").val("");
+         EmailPortalAddressRemoveRequired();
+         $('.popup-body-container#addeditEmailPortalAddress_Pop').removeClass("hide");
+         $('.popup-body-container#addeditEmailPortalAddress_Pop #submitAnswerbtn6').removeClass("hide");
+         $('.popup-body-container#addeditEmailPortalAddress_Pop #updateAnswerbtn6').addClass("hide");
+         $('.popup-body-container#addeditEmailPortalAddress_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+         $('.popup-body-container#addeditEmailPortalAddress_Pop #addeditEmailPortalAddress_Pop_head').text('Add Email Portal Address');
+     });
+      //Edit
+    $(document).on("click", '#portalAddresstab .edit-btn', function (r) {
+        var editDataid = $(this).data("id");
+        portalAddressNameVal = $("#" + editDataid + " #EmailChannelPortalAddress").text();
+        hdnEmailKeywordConfigID = $("#" + editDataid + " #cannedId").text();
+        $("#emailPortalAddressType").val(portalAddressNameVal);
+        $("#hdnEmPortelID").val(editDataid); 
+        $('.popup-body-container#addeditEmailPortalAddress_Pop').removeClass("hide");
+        $('.popup-body-container#addeditEmailPortalAddress_Pop #submitAnswerbtn6').addClass("hide");
+        $('.popup-body-container#addeditEmailPortalAddress_Pop #updateAnswerbtn6').removeClass("hide");
+        $('.popup-body-container#addeditEmailPortalAddress_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+        $('.popup-body-container#addeditEmailPortalAddress_Pop #addeditEmailPortalAddress_Pop_head').text('Edit Email Portal Address');
+    });
+
+      //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EMAIL PORTAL ADDRESS DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+         $(document).on("click", '#portalAddresstab .delete-btn', function () {
+         var emailPorAddressDeleteId = $(this).data("id");
+         var emailPorAddressDeleteText = $(this).closest("td").siblings(".message-text").html();
+         $('.popup-body-container#deleteEmailPortAddresRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+         deleteEmailPortalAddressAddTable(emailPorAddressDeleteId, emailPorAddressDeleteText); 
+     });
+    //confirm button area Delete Successfully Popup
+     $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+         $('.popup-body-container#message_Pop').removeClass("hide");
+         $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+     });
+ });
+</script>
+
+<!--////////////////////////// EMAIL PORTAL ADDRESS Create  PopUp///////////////////////////-->
+<div class="popup-body-container hide " id="addeditEmailPortalAddress_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <div class="popup-header">
+            <h4 class="message-popup-head" id="addeditEmailPortalAddress_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+            <div class="popup-body" style="min-height: 80px;">
+                <ul class="form-container">
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <input type="hidden" name="hdnEmPortelID" id="hdnEmPortelID" value="" />
+                            <div class="label-field">
+                                <label>Portal Address :</label>
+                            </div>
+                            <div class="input-field">
+                            <select id="emailPortalAddressType" name="emailPortalAddressType" class="input-select">
+                                <option value="" selected="selected">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveEmPortAddRow()" id="submitAnswerbtn6">Save</button></li>
+                <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updatePortaltAddress()" id="updateAnswerbtn6">Update</button></li>
+                <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--////////////////////////// EMAIL PORTAL ADDRESS CREATE PopUp End///////////////////////////-->
+
+<!--////////////////////////// EMAIL PORTAL ADDRESS DELETE START///////////////////////////-->
+
+<div class="popup-body-container popup-body-msg  hide" id="deleteEmailPortAddresRowConfirmation_Pop" style="z-index: 99999999">
+        <div class="popup-container">
+            <input type="hidden" name="hdnDeleteEmailPortAddresstableID" id="hdnDeleteEmailPortAddresstableID" value="" />
+            <div class="popup-header delete-popheader">
+                <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+            <div class="popup-body" style="min-height: 80px;">
+                 <p class="message-popup-text msgpopuptxt"></p>
+            </div>
+            <div class="popup-footer">
+                <ul class="popup-btn-container">
+                    <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="deleteConfirmEmailPortalAddressTable()" id="msgConfirm-btn">Yes</button></li>
+                    <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+                </ul>
+            </div>
+        </div>
+</div>
+<!--////////////////////////// EMAIL PORTAL ADDRESS DELETE END///////////////////////////-->
+
+<!-------------------------------EMAIL_TEMP_MAS SCRIPT SECTION--------------------------------------->
+<script>
+ $(document).ready(function () {
+     $(document).on("click", '#templateMastertab .add-page-btn7', function () {
+         $("#emailtemplateType").val("");
+         $("#emailtempMasSubType").val("");
+         $("#emailmasterDescriptionType").val("");
+         $("#hdnEmailTempMasID").val("");
+         EmailTemplateMasterRemoverequired();
+         $('.popup-body-container#addeditEmailTemplateMasterData_Pop').removeClass("hide");
+         $('.popup-body-container#addeditEmailTemplateMasterData_Pop #submitAnswerbtn7').removeClass("hide");
+         $('.popup-body-container#addeditEmailTemplateMasterData_Pop #updateAnswerbtn7').addClass("hide");
+         $('.popup-body-container#addeditEmailTemplateMasterData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+         $('.popup-body-container#addeditEmailTemplateMasterData_Pop #addeditEmailTemplateMasterData_Pop_head').text('Add Email Template Master');
+     });
+      //Edit
+      $(document).on("click", '#templateMastertab .edit-btn07', function (r) {
+            var editDataid = $(this).data("id");
+            templateVal = $("#" + editDataid + " #EmailTemplate").text();
+            subjectVal = $("#" + editDataid + " #EmailSubject").text();
+            descVal = $("#" + editDataid + " #EmailDescription").text();
+            hdnEmailTempMasID = $("#" + editDataid + " #emailtemplaterowidId").text();
+            EmailTemplateMasterRemoverequired();
+            $("#emailtemplateType").val(templateVal);
+            $("#emailtempMasSubType").val(subjectVal);
+            $("#emailmasterDescriptionType").val(descVal)
+            $("#hdnEmailTempMasID").val(editDataid); 
+            $('.popup-body-container#addeditEmailTemplateMasterData_Pop').removeClass("hide");
+            $('.popup-body-container#addeditEmailTemplateMasterData_Pop #submitAnswerbtn7').addClass("hide");
+            $('.popup-body-container#addeditEmailTemplateMasterData_Pop #updateAnswerbtn7').removeClass("hide");
+            $('.popup-body-container#addeditEmailTemplateMasterData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+            $('.popup-body-container#addeditEmailTemplateMasterData_Pop #addeditEmailTempMasData_Pop_head').text('Edit Email Template Master');
+        });
+      //Delete      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EMAIL PORTAL ADDRESS DELETE Section >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      $(document).on("click", '#templateMastertab .delete-btn', function () {
+         var emailTemplateDeleteId = $(this).data("id");
+         var emailTemplateDeleteText = $(this).closest("td").siblings(".message-text").html();
+         $('.popup-body-container#deleteEmailTemplateRowConfirmation_Pop .popup-header').addClass("delete-popheader")
+         deleteTemplateConfigTable(emailTemplateDeleteId, emailTemplateDeleteText); 
+     });
+    //confirm button area Delete Successfully Popup
+     $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+         $('.popup-body-container#message_Pop').removeClass("hide");
+         $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+     });
+
+ });
+</script>
+
+<!---------------------------------------------------------------ADD SECTION FOR EMAIL TEMP MAS------------------>
+<div class="popup-body-container hide " id="addeditEmailTemplateMasterData_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <div class="popup-header">
+            <h4 class="message-popup-head" id="addeditEmailTemplateMasterData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+            <ul class="form-container">
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <input type="hidden" name="hdnEmailTempMasID" id="hdnEmailTempMasID" value="" />
+                        <div class="label-field">
+                            <label>Template :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="emailtemplateType" name="emailtemplateType" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Subject :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="emailtempMasSubType" name="emailtempMasSubType" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                            <label>Description :</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="emailmasterDescriptionType" name="emailmasterDescriptionType" class="text input-select"></input>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveEmailTempMasRow()" id="submitAnswerbtn7">Save</button></li>
+                <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateEmailTempMas()" id="updateAnswerbtn7">Update</button></li>
+                 <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------ADD SECTION END--------------------------------------------------------->
+
+<!--////////////////////////// EMAIL Template Master DELETE START///////////////////////////-->
+
+<div class="popup-body-container popup-body-msg  hide" id="deleteEmailTemplateRowConfirmation_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <input type="hidden" name="hdnDeleteEmailTemplatetableID" id="hdnDeleteEmailTemplatetableID" value="" />
+        <div class="popup-header delete-popheader">
+            <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+             <p class="message-popup-text msgpopuptxt"></p>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="deleteConfirmTemplateMasterTable()" id="msgConfirm-btn">Yes</button></li>
+                <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--////////////////////////// EMAIL Template Master  DELETE END///////////////////////////-->
+
+
+
+
+<!-----------------------------------------------------------REPLY MAILBOX--------------->
+<script>
+        $(document).ready(function () {
+            $(document).on("click", '#replymailboxMastertab .add-page-btn8', function () {
+                $("#id_replaymail_mailbox").val("");
+                $("#id_replaymail_address").val("");
+                $("#id_replaymail_pwd").val("");
+                $("#id_replaymail_desc").val("");
+                $("#hdnReplyID").val("");
+                CategoryRemoveRequired();
+                $('.popup-body-container#addeditreplyData_Pop').removeClass("hide");
+                $('.popup-body-container#addeditreplyData_Pop #submitAnswerbtn').removeClass("hide");
+                $('.popup-body-container#addeditreplyData_Pop #updateAnswerbtn').addClass("hide");
+                $('.popup-body-container#addeditreplyData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+                $('.popup-body-container#addeditreplyData_Pop #addeditreplyData_Pop_head').text('Add Email Replay MailBox');
+            });
+        $(document).on("click", '#replymailboxMastertab .edit-btn', function (r) {
+            var editDataid = $(this).data("id");
+            mailboxNameVal = $("#" + editDataid + " #ReplayMAILBOX").text();
+            AddressNameVal = $("#" + editDataid + " #ReplayADDRESS").text();
+            passwordNameVal = $("#" + editDataid + " #ReplayPASSWORD").text();
+            descriptionNameVal = $("#" + editDataid + " #ReplayDESCRIPTION").text();
+            hdnreplyID = $("#" + editDataid + " #cannedId").text();
+            $("#id_replaymail_mailbox").val(mailboxNameVal);
+            $("#id_replaymail_address").val(AddressNameVal);
+            $("#id_replaymail_pwd").val(passwordNameVal);
+            $("#id_replaymail_desc").val(descriptionNameVal);
+            $("#hdnreplyID").val(editDataid); 
+            $('.popup-body-container#addeditreplyData_Pop').removeClass("hide");
+            $('.popup-body-container#addeditreplyData_Pop #submitAnswerbtn').addClass("hide");
+            $('.popup-body-container#addeditreplyData_Pop #updateAnswerbtn').removeClass("hide");
+            $('.popup-body-container#addeditreplyData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+            $('.popup-body-container#addeditreplyData_Pop #addeditreplyData_Pop_head').text('Edit Email Replay MailBox');
+        });
+        $(document).on("click", '#replymailboxMastertab .delete-btn', function () {
+            var replyDeleteId = $(this).data("id");
+            var replyDeleteText = $(this).closest("td").siblings(".message-text").html();
+            $('.popup-body-container#deletereplyRowConfirm_Pop .popup-header').addClass("delete-popheader")
+            deleteReplaymailboxTable(replyDeleteId, replyDeleteText); 
+        });
+
+        $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+            $('.popup-body-container#message_Pop').removeClass("hide");
+            $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+        });
+             
+        });
+            //Popup
+    </script>
+    <!---------------------------------------------------------------ADD SECTION FOR REPLY MAILBOX------------------>
+
+    <div class="popup-body-container hide " id="addeditreplyData_Pop" style="z-index: 99999999">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h4 class="message-popup-head" id="addeditreplyData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+            <div class="popup-body" style="min-height: 80px;">
+                <ul class="form-container">
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <input type="hidden" name="hdnreplyID" id="hdnreplyID" value="" />
+                            <div class="label-field">
+                                <label>Mailbox ID :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="id_replaymail_mailbox" name="id_replaymail_mailbox" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>Address :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="id_replaymail_address" name="id_replaymail_address" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+    
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>PASWORD :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="id_replaymail_pwd" name="id_replaymail_pwd" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+    
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>Description :</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="id_replaymail_desc" name="id_replaymail_desc" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="popup-footer">
+                <ul class="popup-btn-container">
+                    <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveReplayMailboxrow()" id="submitAnswerbtn">Save</button></li>
+                    <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateReplaymailbox()" id="updateAnswerbtn">Update</button></li>
+                     <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        <!---------------------------------------------------------------ADD SECTION FOR REPLY MAILBOX END------------------>
+    <!---------------------------------------------------------------Delete SECTION FOR REPLY MAILBOX------------------>
+
+    <div class="popup-body-container popup-body-msg  hide" id="deletereplyRowConfirm_Pop" style="z-index: 99999999">
+        <div class="popup-container">
+            <input type="hidden" name="hdnDeletereplytableID" id="hdnDeletereplytableID" value="" />
+            <input type="hidden" name="hdnDeletemailboxtableID" id="hdnDeletemailboxtableID" value="" />
+            <div class="popup-header delete-popheader">
+                <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+            <div class="popup-body" style="min-height: 80px;">
+    
+                <p class="message-popup-text msgpopuptxt"></p>
+            </div>
+            <div class="popup-footer">
+                <ul class="popup-btn-container">
+                    <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return deleteConfirmreplymailboxTable();" id="msgConfirm-btn">Yes</button></li>
+                     <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------------Delete SECTION FOR REPLY MAILBOX END------------------>
+
+<!-----------------------------------------------------------OC Email Mailbox Config--------------->
+
+    <script>
+     $(document).ready(function () {
+         $(document).on("click", '#ocMailboxtab .add-page-btn9', function () {
+             $("#mailBox-id").val("");
+             $("#entity-id").val("");
+             $("#attributes-id").val("");
+             $("#channel_ewt_primary_attribute-id").val("");
+    
+             $("#primary_target_time-id").val("");
+             $("#auto_ack_template-id").val("");
+             $("#auto_ack_mailbox-id").val("");
+             $("#is_form_email_mailbox-id").val("");
+    
+             $("#is_deflection_enabled-id").val("");
+             $("#def_email_template-id").val("");
+             $("#deflection_email_mailbox-id").val("");
+             $("#repeat_check_enabled-id").val("");
+    
+             $("#repeat_interval-id").val("");
+             $("#repeat_count-id").val("");
+             $("#cc_check_enabled-id").val("");
+             $("#cc_attributes-id").val("");
+    
+             $("#keyword_group-id").val("");
+             $("#blacklist_enabled-id").val("");
+             $("#keyword_group_blacklist-id").val("");
+             $("#content_masking_pattern-id").val("");
+    
+             $("#masking_string-id").val("");
+             $("#append_reference_subject-id").val("");
+             $("#escalation_attribute-id").val("");
+             $("#last_agent_routing_enabled-id").val("");
+    
+             $("#last_agent_wait_time-id").val("");
+             $("#ewt_conditions-id").val("");
+             $("#ewt_attributes-id").val("");
+             $("#hdnMailBoxConfigID").val("");
+             MailBoxConfigADDRemoverequired();
+             $('.popup-body-container#addeditMailBoxData_Pop').removeClass("hide");
+             $('.popup-body-container#addeditMailBoxData_Pop #submitAnswerbtn7').removeClass("hide");
+             $('.popup-body-container#addeditMailBoxData_Pop #updateAnswerbtn7').addClass("hide");
+             $('.popup-body-container#addeditMailBoxData_Pop .popup-header').addClass("add-popheader").removeClass("edit-popheader");
+             $('.popup-body-container#addeditMailBoxData_Pop #addeditMailBoxData_Pop_head').text('Add Email MailBox Config');
+         });
+          //Edit
+          $(document).on("click", '#ocMailboxtab .edit-btn', function (r) {
+                var editDataid = $(this).data("id");
+                mailBox = $("#" + editDataid + "#EmailMAILBOX").text();
+                entity = $("#" + editDataid + " #EmailENTITY").text();
+                attributes = $("#" + editDataid + " #EmailATTRIBUTES").text();
+                channel_ewt_primary_attribute = $("#" + editDataid + " #EmailCHANNEL_EWT_PRIMARY_ATTRIBUTE").text();
+
+                primary_target_time = $("#" + editDataid + " #EmailPRIMARY_TARGET_TIME ").text();
+                auto_ack_template = $("#" + editDataid + " #EmailAUTO_ACK_TEMPLATE_ID").text();
+                auto_ack_mailbox = $("#" + editDataid + " #EmailAUTO_ACK_MAILBOX_ID ").text();
+                is_form_email_mailbox = $("#" + editDataid + " #EmailIS_FORM_EMAIL_MAILBOX ").text();
+
+                is_deflection_enabled = $("#" + editDataid + " #EmailIS_DEFLECTION_ENABLED").text();
+                def_email_template = $("#" + editDataid + " #EmailDEFLECTION_EMAIL_TEMPLATE_ID").text();
+                deflection_email_mailbox = $("#" + editDataid + " #EmailDEFLECTION_EMAIL_MAILBOX_ID").text();
+                repeat_check_enabled = $("#" + editDataid + " #EmailREPEAT_CHECK_ENABLED ").text();
+
+                repeat_interval = $("#" + editDataid + " #EmailREPEAT_INTERVAL").text();
+                repeat_count = $("#" + editDataid + " #EmailREPEAT_COUNT ").text();
+                cc_check_enabled = $("#" + editDataid + " #EmailCC_CHECK_ENABLED").text();
+                cc_attributes = $("#" + editDataid + " #EmailCC_ATTRIBUTES").text();
+
+                keyword_group = $("#" + editDataid + " #EmailKEYWORD_GROUP_ID").text();
+                blacklist_enabled = $("#" + editDataid + " #EmailBLACKLIST_ENABLED").text();
+                keyword_group_blacklist = $("#" + editDataid + " #EmailKEYWORD_GROUP_ID_BLACKLIST").text();
+                content_masking_pattern = $("#" + editDataid + " #EmailCONTENT_MASKING_PATTERN").text();
+
+                masking_string = $("#" + editDataid + " #EmailMASKING_STRING").text();
+                append_reference_subject = $("#" + editDataid + " #EmailAPPEND_REFERENCE_SUBJECT").text();
+                escalation_attribute = $("#" + editDataid + " #EmailESCALATION_ATTRIBUTE").text();
+                last_agent_routing_enabled = $("#" + editDataid + " #EmailLAST_AGENT_ROUTING_ENABLED").text();
+
+                last_agent_wait_time = $("#" + editDataid + " #EmailLAST_AGENT_WAIT_TIME ").text();
+                ewt_conditions = $("#" + editDataid + " #EmailEWT_CONDITIONS").text();
+                ewt_attributes = $("#" + editDataid + " #EmailEWT_ATTRIBUTES").text();
+                
+                hdnMailBoxConfigID= $("#" + editDataid + " #MailBoxId").text();
+               // MailBoxConfigEDITRemoverequired();
+                $("#mailBox-id").val(mailBox);
+             $("#entity-id").val(entity);
+             $("#attributes-id").val(attributes);
+             $("#channel_ewt_primary_attribute-id").val(channel_ewt_primary_attribute);
+    
+             $("#primary_target_time-id").val(primary_target_time);
+             $("#auto_ack_template-id").val(auto_ack_template);
+             $("#auto_ack_mailbox-id").val(auto_ack_mailbox);
+             $("#is_form_email_mailbox-id").val(is_form_email_mailbox);
+    
+             $("#is_deflection_enabled-id").val(is_deflection_enabled);
+             $("#def_email_template-id").val(def_email_template);
+             $("#deflection_email_mailbox-id").val(deflection_email_mailbox);
+             $("#repeat_check_enabled-id").val(repeat_check_enabled);
+    
+             $("#repeat_interval-id").val(repeat_interval);
+             $("#repeat_count-id").val(repeat_count);
+             $("#cc_check_enabled-id").val(cc_check_enabled);
+             $("#cc_attributes-id").val(cc_attributes);
+    
+             $("#keyword_group-id").val(keyword_group);
+             $("#blacklist_enabled-id").val(blacklist_enabled);
+             $("#keyword_group_blacklist-id").val(keyword_group_blacklist);
+             $("#content_masking_pattern-id").val(content_masking_pattern);
+    
+             $("#masking_string-id").val(masking_string);
+             $("#append_reference_subject-id").val(append_reference_subject);
+             $("#escalation_attribute-id").val(escalation_attribute);
+             $("#last_agent_routing_enabled-id").val(last_agent_routing_enabled);
+    
+             $("#last_agent_wait_time-id").val(last_agent_wait_time);
+             $("#ewt_conditions-id").val(ewt_conditions);
+             $("#ewt_attributes-id").val(ewt_attributes);
+             $("#hdnMailBoxConfigID").val(editDataid);
+            $('.popup-body-container#addeditMailBoxData_Pop').removeClass("hide");
+            $('.popup-body-container#addeditMailBoxData_Pop #submitAnswerbtn7').addClass("hide");
+            $('.popup-body-container#addeditMailBoxData_Pop #updateAnswerbtn7').removeClass("hide");
+
+            $('.popup-body-container#addeditMailBoxData_Pop .popup-header').removeClass("add-popheader").addClass("edit-popheader");
+            $('.popup-body-container#addeditMailBoxData_Pop #addeditMailBoxData_Pop_head').text('Edit Email MailBox Config');
+        });
+        $(document).on("click", '#ocMailboxtab .delete-btn', function () {
+            var replyDeleteId = $(this).data("id");
+            var replyDeleteText = $(this).closest("td").siblings(".message-text").html();
+            $('.popup-body-container#deleteOCMailboxRowConfirm_Pop .popup-header').addClass("delete-popheader")
+            deleteOCMailboxmailboxTable(replyDeleteId, replyDeleteText); 
+        });
+
+        $(document).on("click", '.popup-body-container #msgConfirm-btn', function () {
+            $('.popup-body-container#message_Pop').removeClass("hide");
+            $('.popup-body-container#message_Pop .message-popup-text').html("<span style='color: #e14343'> Deleted Successfully!!</span>");
+        });
+
+
+
+
+     });
+    </script>
+    
+    
+    
+    
+    <!---------------------------------------------------------------ADD SECTION FOR EMAIL MailBOX Config-------------->
+    <div class="popup-body-container hide " id="addeditMailBoxData_Pop" style="z-index: 99999999">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h4 class="message-popup-head" id="addeditMailBoxData_Pop_head"></h4><i class="close-pop-btn hide">X</i>
+            </div>
+            <div class="popup-body" style="min-height: 100
+            px;">
+                <ul class="form-container">
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <input type="hidden" name="hdnMailBoxConfigID" id="hdnMailBoxConfigID" value="" />
+                            <div class="label-field">
+                                <label>MAILBOX</label><!--1-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="mailBox-id" name="mailBox-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>ENTITY</label><!--2-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="entity-id" name="entity-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>ATTRIBUTES</label><!--3-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="attributes-id" name="attributes-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>CHANNEL EWT PRIMARY ATTRIBUTE</label><!--4-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="channel_ewt_primary_attribute-id" name="channel_ewt_primary_attribute-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>PRIMARY TARGET_TIME</label><!--5-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="primary_target_time-id" name="primary_target_time-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>AUTO ACK TEMPLATE_ID</label><!--6-->
+                            </div>
+                            
+                            <div class="input-field">
+                                <select id="auto_ack_template-id" name="auto_ack_template-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>AUTO ACK MAILBOX_ID</label><!--7-->
+                            </div>
+                            <div class="input-field">
+                                <select id="auto_ack_mailbox-id" name="auto_ack_mailbox-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+                    </li>
+                  
+                   <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                                <label>IS FORM EMAIL MAILBOX</label><!--8-->
+                            </div>
+                            <div class="input-field">
+                               
+                                    <select id="is_form_email_mailbox-id" name="is_form_email_mailbox-id" class="input-select">
+                                        <option value="" selected="selected">Select</option>
+                                       <option value="Yes" selected="selected">Yes</option>
+                                       <option value="No" selected="selected">No</option>
+                                </select>
+                            </div>
+                           
+                        </div>
+                    </li>
+                      <!--
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                             <div class="label-field">
+                                 <label>SMS Flag :</label>
+                            </div>
+                            <div class="input-field">
+                                 <select id="cboSmsFlagType" name="cboSmsFlagType" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                     <option value="" selected="selected">True</option>
+                                    <option value="" selected="selected">False</option>
+                                </select>
+                             </div>
+                            </div>
+                        </li>
+                   -->
+                   <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="input-group">
+                        <div class="label-field">
+                                <label>IS DEFLECTION ENABLED</label><!--9-->
+                            </div>
+                            <div class="input-field">
+                                <select id="is_deflection_enabled-id" name="is_deflection_enabled-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                <option value="Yes" selected="selected">Yes</option>
+                                <option value="No" selected="selected">No</option>
+                                </select>
+                            </div>
+                           
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>DEFLECTION EMAIL TEMPLATE_ID</label><!--10-->
+                            </div>
+                           
+                            <div class="input-field">
+                                <select id="def_email_template-id" name="def_email_template-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>DEFLECTION EMAIL MAILBOX_ID</label><!--11-->
+                            </div>
+                          
+                            <div class="input-field">
+                                <select id="deflection_email_mailbox-id" name="deflection_email_mailbox-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>REPEAT CHECK ENABLED</label><!--12-->
+                            </div>
+                           
+                            <div class="input-field">
+                                <select id="repeat_check_enabled-id" name="repeat_check_enabled-id" class="input-select">
+                                <option value="" selected="selected">Select</option>
+                                <option value="Yes" selected="selected">Yes</option>
+                                <option value="No" selected="selected">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>REPEAT INTERVAL</label><!--13-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="repeat_interval-id" name="repeat_interval-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>REPEAT COUNT</label><!--14-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="repeat_count-id" name="repeat_count-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>CC CHECK_ENABLED</label><!--15-->
+                            </div>
+                          
+                            <div class="input-field">
+                                <select id="cc_check_enabled-id" name="cc_check_enabled-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                <option value="Yes" selected="selected">Yes</option>
+                                <option value="No" selected="selected">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>CC ATTRIBUTES</label><!--16-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="cc_attributes-id" name="cc_attributes-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>KEYWORD GROUP ID</label><!--17-->
+                            </div>
+                           
+                            <div class="input-field">
+                                <select id="keyword_group-id" name="keyword_group-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>BLACKLIST ENABLED</label><!--18-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="blacklist_enabled-id" name="blacklist_enabled-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>KEYWORD GROUP ID BLACKLIST</label><!--19-->
+                            </div>
+                            
+                            <div class="input-field">
+                                <select id="keyword_group_blacklist-id" name="keyword_group_blacklist-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>CONTENT MASKING PATTERN</label><!--20-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="content_masking_pattern-id" name="content_masking_pattern-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>MASKING STRING</label><!--21-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="masking_string-id" name="masking_string-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>APPEND REFERENCE SUBJECT :</label><!--22-->
+                            </div>
+                           
+                            
+                            <div class="input-field">
+                                <select id="append_reference_subject-id" name="append_reference_subject-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                <option value="Yes" selected="selected">Yes</option>
+                                <option value="No" selected="selected">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>ESCALATION ATTRIBUTE :</label><!--23-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="escalation_attribute-id" name="escalation_attribute-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <!--
+                      <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>CONTENT MASKING PATTERN</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="content_masking_pattern-id" name="content_masking_pattern-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>   
+                    -->
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>LAST AGENT ROUTING ENABLED</label><!--24-->
+                            </div>
+                            
+                            <div class="input-field">
+                                <select id="last_agent_routing_enabled-id" name="last_agent_routing_enabled-id" class="input-select">
+                                    <option value="" selected="selected">Select</option>
+                                <option value="Yes" selected="selected">Yes</option>
+                                <option value="No" selected="selected">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>LAST AGENT WAIT TIME</label><!--25-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="last_agent_wait_time-id" name="last_agent_wait_time-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>EWT CONDITIONS</label><!--26-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="ewt_conditions-id" name="ewt_conditions-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="input-group">
+                            <div class="label-field">
+                                <label>EWT ATTRIBUTES</label><!--27-->
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="ewt_attributes-id" name="ewt_attributes-id" class="text input-select"></input>
+                            </div>
+                        </div>
+                    </li>
+                   
+                </ul>
+            </div>
+            <div class="popup-footer">
+                <ul class="popup-btn-container">
+                    <li class="pull-right"><button class="input-btn green-btn hide" onclick="saveMailBoxConfigRow()" id="submitAnswerbtn7">Save</button></li>
+                    <li class="pull-right"><button class="input-btn blue-btn hide" onclick="updateMailBoxConfigRow()" id="updateAnswerbtn7">Update</button></li>
+                     <li class="pull-right"><button class="input-btn red-btn popup-close-btn ">Cancel</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+ <!---------------------------------------------------------------Delete SECTION FOR REPLY MAILBOX------------------>
+
+ <div class="popup-body-container popup-body-msg  hide" id="deleteOCMailboxRowConfirm_Pop" style="z-index: 99999999">
+    <div class="popup-container">
+        <input type="hidden" name="hdnDeleteocmailboxtableID" id="hdnDeleteocmailboxtableID" value="" />
+        <input type="hidden" name="hdnDeleteocmailboxName" id="hdnDeleteocmailboxName" value="" />
+
+        <div class="popup-header delete-popheader">
+            <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+        </div>
+        <div class="popup-body" style="min-height: 80px;">
+
+            <p class="message-popup-text msgpopuptxt"></p>
+        </div>
+        <div class="popup-footer">
+            <ul class="popup-btn-container">
+                <li class="pull-right"><button class="input-btn green-btn popup-close-btn" onclick="return deleteConfirmOCmailboxTable();" id="msgConfirm-btn">Yes</button></li>
+                 <li class="pull-right"><button class="input-btn red-btn popup-close-btn" id="msgCancel-btn">No</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------------Delete SECTION FOR REPLY MAILBOX END------------------>
+
+
+
+
+<!-----------------------------------------------------------OC Email Mailbox Config--------------->
+               <!----------- Close Button ALL FOR ONE---------------------->
+               <div class="popup-body-container popup-body-msg  hide" id="message_Pop" style="z-index: 99999999">
+                <div class="popup-container">
+                    <div class="popup-header edit-popheader">
+                        <input type="hidden" name="hdnPopupStatus" id="hdnPopupStatus" value="" />
+                        <h4 class="message-popup-head"></h4><i class="close-pop-btn hide">X</i>
+                    </div>
+                    <div class="popup-body" style="min-height: 80px;">
+                        <p class="message-popup-text msgpopuptxt1"></p>
+                    </div>
+                    <div class="popup-footer">
+                        <ul class="popup-btn-container">
+                            <li class="pull-right"><button class="input-btn red-btn" onclick="messagePopClose()" id="msgClose-btn">Close</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        
+
+
+     </div>>
+</body>>        
+                        
+                  
